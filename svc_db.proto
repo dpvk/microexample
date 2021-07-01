@@ -1,0 +1,16 @@
+syntax = "proto3";
+package kubertest;
+option go_package = "pkg/api";
+message DBRequest {
+  string client = 1;
+  string orch   = 2;
+}
+
+message DBResponse {
+    string db      = 1;
+    string data    = 2;
+}
+
+service DBS {
+  rpc Process (DBRequest) returns (DBResponse) {}
+}

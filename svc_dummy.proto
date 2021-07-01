@@ -1,0 +1,15 @@
+syntax = "proto3";
+package kubertest;
+option go_package = "pkg/api";
+message DummyRequest {
+  string client = 1;
+  string orch   = 2;
+}
+
+message DumyResponse {
+    string dummy      = 5;
+}
+
+service Dummy {
+  rpc Process (DummyRequest) returns (DumyResponse) {}
+}

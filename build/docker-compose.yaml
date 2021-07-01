@@ -1,0 +1,50 @@
+version: "3.9"
+services:
+  adapter:
+    build: ./adapter/
+    depends_on: 
+      - orch
+    environment:
+      LISTEN: ":5001"
+      ORCH: "orch:5001"
+    ports: 
+      - "5001:5001"
+      
+  orch:
+    build: ./orch/
+    deploy:
+      replicas: 5
+    depends_on: 
+      - svc_dummy
+      - svc_db
+    environment:
+      LISTEN: ":5001"
+      DUMMY: "svc_dummy:5001"
+      DB: "svc_db:5001"
+
+  svc_dummy:
+    build: ./svc_dummy/
+    deploy:
+      replicas: 5
+    environment:
+      LISTEN: ":5001"
+
+  svc_db:
+    build: ./svc_db/
+    depends_on: 
+      - db
+    deploy:
+      replicas: 5
+    environment:
+      LISTEN: ":5001"
+      DB: "user=postgres password=postgres dbname=postgres host=db sslmode=disable"
+  db:
+    image: postgres
+    restart: always
+    environment:
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_USER: postgres
+    volumes:
+      - ./pgdata/data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"

@@ -1,0 +1,21 @@
+syntax = "proto3";
+package kubertest;
+option go_package = "pkg/api";
+//option go_package = "adapter";
+message Request {
+  string client = 1;
+}
+
+message Response {
+    string client  = 1;
+    string adapter = 2;
+    string orch    = 3;
+    string dummy   = 4;
+    string db      = 5;
+    string data    = 6;
+}
+
+
+service Adapter {
+  rpc Send (Request) returns (Response) {}
+}
